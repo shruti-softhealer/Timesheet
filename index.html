@@ -3,134 +3,611 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timesheet Calculator</title>
+  <title>Timesheet ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #ffffff;
-      --text: #111;
-      --card: #f5f5f5;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body.dark {
-      --bg: #0f172a;
-      --text: #f1f5f9;
-      --card: #1e293b;
+    :root {
+      --pink: #ff6eb4;
+      --lavender: #c084fc;
+      --sky: #67e8f9;
+      --mint: #6ee7b7;
+      --gold: #fbbf24;
+      --card-bg: rgba(10, 6, 20, 0.72);
+      --border: rgba(255,255,255,0.08);
+      --text: #f0e8ff;
+      --muted: rgba(240,232,255,0.45);
     }
 
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
+      justify-content: center;
+      overflow: hidden;
+      background: #060412;
+      color: var(--text);
     }
 
-    .container {
-      background: var(--card);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      width: 300px;
-      text-align: center;
+    /* ── BACKGROUND CANVAS ── */
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    h2 {
-      margin-bottom: 20px;
+    /* ── FLOATING BLOBS ── */
+    .blobs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      animation: blobFloat linear infinite;
+    }
+    .blob:nth-child(1){ width:420px;height:420px;background:var(--lavender);top:-10%;left:-5%;animation-duration:18s;animation-delay:0s; }
+    .blob:nth-child(2){ width:320px;height:320px;background:var(--pink);top:60%;left:65%;animation-duration:22s;animation-delay:-5s; }
+    .blob:nth-child(3){ width:280px;height:280px;background:var(--sky);top:30%;left:80%;animation-duration:16s;animation-delay:-9s; }
+    .blob:nth-child(4){ width:360px;height:360px;background:var(--mint);top:75%;left:-8%;animation-duration:25s;animation-delay:-3s; }
+    .blob:nth-child(5){ width:200px;height:200px;background:var(--gold);top:10%;left:55%;animation-duration:20s;animation-delay:-12s; }
+
+    @keyframes blobFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      25%  { transform: translate(30px,-40px) scale(1.08); }
+      50%  { transform: translate(-20px,30px) scale(0.95); }
+      75%  { transform: translate(40px,20px) scale(1.05); }
+      100% { transform: translate(0,0) scale(1); }
     }
 
-    input {
+    /* ── CARD ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      width: 380px;
+      background: var(--card-bg);
+      backdrop-filter: blur(32px) saturate(180%);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 36px 32px 32px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 24px 60px rgba(0,0,0,0.55),
+        0 0 80px rgba(192,132,252,0.1);
+      animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes cardIn {
+      from { opacity:0; transform:translateY(30px) scale(0.96); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* shimmering top border */
+    .card::before {
+      content:'';
+      position:absolute;
+      top:0; left:10%; right:10%;
+      height:1px;
+      background: linear-gradient(90deg, transparent, var(--lavender), var(--pink), var(--sky), transparent);
+      border-radius:999px;
+      animation: shimmerLine 3s ease-in-out infinite;
+    }
+    @keyframes shimmerLine {
+      0%,100%{ opacity:0.5; transform:scaleX(0.8); }
+      50%{ opacity:1; transform:scaleX(1); }
+    }
+
+    /* ── HEADER ── */
+    .header { text-align:center; margin-bottom:28px; }
+    .emoji-icon {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 8px;
+      animation: iconBob 2.5s ease-in-out infinite;
+      transition: opacity 0.7s;
+    }
+    @keyframes iconBob {
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-6px); }
+    }
+    .title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      line-height: 1.45;
+      background: linear-gradient(120deg, var(--lavender), var(--pink), var(--sky));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.01px;
+      transition: opacity 0.7s;
+    }
+    .subtitle {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 5px;
+      letter-spacing: 0.06em;
+      font-style: normal;
+      transition: opacity 0.7s;
+    }
+
+    /* ── LIVE CLOCK ── */
+    .clock-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+    }
+    .clock-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 8px var(--mint);
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100%{ opacity:1; transform:scale(1); }
+      50%{ opacity:0.4; transform:scale(0.7); }
+    }
+    #clock {
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    /* ── INPUTS ── */
+    .field {
+      margin-bottom: 16px;
+    }
+    .field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    input[type="text"], input[type="time"] {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: none;
+      padding: 13px 14px 13px 40px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
       outline: none;
-      font-size: 16px;
+      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+      -webkit-appearance: none;
+    }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
+    input[type="text"]:focus, input[type="time"]:focus {
+      border-color: var(--lavender);
+      background: rgba(192,132,252,0.07);
+      box-shadow: 0 0 0 3px rgba(192,132,252,0.15);
+    }
+    /* hide ugly time picker chrome */
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) opacity(0.4);
+      cursor: pointer;
     }
 
+    /* ── BUTTON ── */
     button {
       width: 100%;
-      padding: 12px;
+      padding: 15px;
+      margin-top: 4px;
       border: none;
-      border-radius: 10px;
-      background: #4f46e5;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f59e0b);
+      background-size: 200% 200%;
       color: white;
-      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
+      letter-spacing: 0.03em;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+      animation: gradientShift 4s ease infinite;
     }
-
-    button:hover {
-      opacity: 0.9;
+    @keyframes gradientShift {
+      0%{ background-position:0% 50%; }
+      50%{ background-position:100% 50%; }
+      100%{ background-position:0% 50%; }
     }
+    button::after {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(rgba(255,255,255,0.15), transparent);
+      pointer-events:none;
+    }
+    button:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(168,85,247,0.4); }
+    button:active { transform:translateY(0); }
 
+    /* ── RESULT ── */
     .result {
       margin-top: 20px;
-      font-size: 18px;
-      font-weight: bold;
+      border-radius: 18px;
+      overflow: hidden;
+      display: none;
     }
+    .result.show { display: block; animation: resultIn 0.5s cubic-bezier(.22,1,.36,1) both; }
+    @keyframes resultIn {
+      from{ opacity:0; transform:translateY(12px) scale(0.97); }
+      to  { opacity:1; transform:translateY(0) scale(1); }
+    }
+    .result-inner {
+      background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(236,72,153,0.12), rgba(6,182,212,0.12));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+    }
+    .result-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .result-time {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      background: linear-gradient(120deg, #c084fc, #f472b6, #67e8f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+    .result-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .result-extra {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 7px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge span { color: var(--muted); font-weight:400; margin-right:4px; }
+    .over { color: #f87171; }
+    .ok  { color: var(--mint); }
 
-    .toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 14px;
+    /* ── ERROR ── */
+    .error-msg {
+      display:none;
+      margin-top:14px;
+      background:rgba(239,68,68,0.12);
+      border:1px solid rgba(239,68,68,0.3);
+      border-radius:12px;
+      padding:10px 14px;
+      font-size:0.8rem;
+      color:#fca5a5;
+      text-align:center;
     }
+    .error-msg.show { display:block; animation:resultIn 0.4s both; }
   </style>
 </head>
 <body>
 
-<div class="toggle" onclick="toggleMode()">🌙/☀️</div>
+<div class="blobs">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+</div>
 
-<div class="container">
-  <h2>🕒 Timesheet</h2>
+<canvas id="bg"></canvas>
 
-  <input id="completed" placeholder="Completed (HH:MM)" />
-  <input id="required" value="8:20" />
+<div class="card">
+  <div class="header">
+    <span class="emoji-icon" id="quoteEmoji">✨</span>
+    <div class="title" id="quoteText">Loading…</div>
+    <div class="subtitle" id="quoteAuthor">— …</div>
+  </div>
 
-  <button onclick="calculate()">Calculate</button>
+  <div class="clock-wrap">
+    <div class="clock-dot"></div>
+    <div id="clock">Loading…</div>
+  </div>
 
-  <div class="result" id="result"></div>
+  <div class="field">
+    <label>Time Completed So Far</label>
+    <div class="input-wrap">
+      <span class="input-icon">✅</span>
+      <input type="text" id="completed" placeholder="e.g. 4:00 or 4:30" autocomplete="off"/>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Required Work Hours</label>
+    <div class="input-wrap">
+      <span class="input-icon">🎯</span>
+      <input type="text" id="required" value="8:20" autocomplete="off"/>
+    </div>
+  </div>
+
+  <button onclick="calculate()">✨ Calculate Leave Time</button>
+
+  <div class="error-msg" id="errorMsg"></div>
+
+  <div class="result" id="result">
+    <div class="result-inner">
+      <div class="result-label">🏠 You can go home at</div>
+      <div class="result-time" id="leaveTime">—</div>
+      <div class="result-sub" id="remainingLabel"></div>
+      <div class="result-extra">
+        <div class="badge" id="badge1"><span>Remaining</span><span id="remainVal">—</span></div>
+        <div class="badge" id="badge2"><span>Status</span><span id="statusVal">—</span></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-function toMinutes(time) {
-  let [h, m] = time.split(":").map(Number);
+/* ── QUOTES ── */
+const quotes = [
+  { emoji:'🌅', text:'Every hour worked is a step closer to your dreams.', author:'— Unknown' },
+  { emoji:'💪', text:'Hard work beats talent when talent doesn\'t work hard.', author:'— Tim Notke' },
+  { emoji:'🔥', text:'Push yourself, because no one else is going to do it for you.', author:'— Unknown' },
+  { emoji:'🌟', text:'Small progress is still progress.', author:'— Unknown' },
+  { emoji:'☀️', text:'The secret of getting ahead is getting started.', author:'— Mark Twain' },
+  { emoji:'🚀', text:'Dream big. Work hard. Stay humble.', author:'— Unknown' },
+  { emoji:'🎯', text:'Focus on being productive instead of busy.', author:'— Tim Ferriss' },
+  { emoji:'🌸', text:'You are capable of amazing things.', author:'— Unknown' },
+  { emoji:'⚡', text:'Don\'t watch the clock; do what it does. Keep going.', author:'— Sam Levenson' },
+  { emoji:'🌈', text:'The day you plant the seed is not the day you eat the fruit.', author:'— Fabienne Fredrickson' },
+];
+
+let currentQuote = Math.floor(Math.random() * quotes.length);
+
+function showQuote(idx) {
+  const q = quotes[idx];
+  const emojiEl  = document.getElementById('quoteEmoji');
+  const textEl   = document.getElementById('quoteText');
+  const authorEl = document.getElementById('quoteAuthor');
+  // fade out
+  [emojiEl, textEl, authorEl].forEach(el => el.style.opacity = '0');
+  setTimeout(() => {
+    emojiEl.textContent  = q.emoji;
+    textEl.textContent   = q.text;
+    authorEl.textContent = q.author;
+    [emojiEl, textEl, authorEl].forEach(el => el.style.transition = 'opacity 0.7s');
+    [emojiEl, textEl, authorEl].forEach(el => el.style.opacity = '1');
+  }, 400);
+}
+
+showQuote(currentQuote);
+setInterval(() => {
+  currentQuote = (currentQuote + 1) % quotes.length;
+  showQuote(currentQuote);
+}, 8000);
+
+/* ── CLOCK (12-hour) ── */
+function updateClock() {
+  const now = new Date();
+  let h = now.getHours();
+  const m  = String(now.getMinutes()).padStart(2, '0');
+  const s  = String(now.getSeconds()).padStart(2, '0');
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  document.getElementById('clock').textContent = `Live • ${h}:${m}:${s} ${ampm}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+/* ── PARSE HH:MM (flexible) ── */
+function parseTime(str) {
+  str = str.trim().replace(/[^\d:]/g, '');
+  if (!str) return null;
+  let parts = str.split(':');
+  let h = parseInt(parts[0], 10);
+  let m = parts[1] !== undefined ? parseInt(parts[1], 10) : 0;
+  if (isNaN(h)) return null;
+  if (isNaN(m)) m = 0;
   return h * 60 + m;
 }
 
-function toTime(minutes) {
-  let h = Math.floor(minutes / 60);
-  let m = minutes % 60;
+/* ── FORMAT minutes → H:MM AM/PM ── */
+function fmtTime(totalMins) {
+  totalMins = ((totalMins % 1440) + 1440) % 1440; // wrap around midnight
+  let h = Math.floor(totalMins / 60);
+  let m = totalMins % 60;
   let ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  return `${h}:${m.toString().padStart(2,'0')} ${ampm}`;
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
 }
 
-function getCurrentTimeMinutes() {
-  let now = new Date();
-  return now.getHours() * 60 + now.getMinutes();
+/* ── FORMAT minutes → Xh Ym ── */
+function fmtDuration(mins) {
+  let sign = mins < 0 ? '-' : '';
+  mins = Math.abs(mins);
+  let h = Math.floor(mins / 60);
+  let m = mins % 60;
+  if (h === 0) return `${sign}${m}m`;
+  if (m === 0) return `${sign}${h}h`;
+  return `${sign}${h}h ${m}m`;
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  document.getElementById('result').classList.remove('show');
+}
+
+function hideError() {
+  document.getElementById('errorMsg').classList.remove('show');
 }
 
 function calculate() {
-  let completed = toMinutes(document.getElementById("completed").value);
-  let required = toMinutes(document.getElementById("required").value);
-  let current = getCurrentTimeMinutes();
+  hideError();
+  const completedMins = parseTime(document.getElementById('completed').value);
+  const requiredMins  = parseTime(document.getElementById('required').value);
 
-  let remaining = required - completed;
-  let leaveTime = current + remaining;
+  if (completedMins === null || completedMins < 0) {
+    showError('⚠️ Please enter a valid Completed time (e.g. 4:00 or 4:30)');
+    return;
+  }
+  if (requiredMins === null || requiredMins <= 0) {
+    showError('⚠️ Please enter a valid Required hours (e.g. 8:20)');
+    return;
+  }
 
-  document.getElementById("result").innerText =
-    "Go home at: " + toTime(leaveTime);
+  const now = new Date();
+  const currentMins = now.getHours() * 60 + now.getMinutes();
+  const remaining   = requiredMins - completedMins;
+  const leaveMins   = currentMins + remaining;
+
+  document.getElementById('leaveTime').textContent = fmtTime(leaveMins);
+
+  if (remaining <= 0) {
+    document.getElementById('remainingLabel').textContent = 'You\'ve already completed your required hours! 🎉';
+    document.getElementById('remainVal').textContent  = '0m';
+    document.getElementById('statusVal').textContent  = '✅ Done';
+    document.getElementById('statusVal').className    = 'ok';
+  } else {
+    document.getElementById('remainingLabel').textContent = `${fmtDuration(remaining)} left to work`;
+    document.getElementById('remainVal').textContent = fmtDuration(remaining);
+    if (remaining > requiredMins * 0.5) {
+      document.getElementById('statusVal').textContent = '⏳ Keep going';
+      document.getElementById('statusVal').className = '';
+    } else {
+      document.getElementById('statusVal').textContent = '🚀 Almost there';
+      document.getElementById('statusVal').className = 'ok';
+    }
+  }
+
+  document.getElementById('result').classList.add('show');
 }
 
-function toggleMode() {
-  document.body.classList.toggle("dark");
+/* ── PARTICLE CANVAS ── */
+const canvas = document.getElementById('bg');
+const ctx    = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
+window.addEventListener('resize', resize);
+resize();
+
+const COLORS = ['#c084fc','#f472b6','#67e8f9','#6ee7b7','#fbbf24'];
+
+function mkParticle() {
+  return {
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.8 + 0.4,
+    dx: (Math.random() - 0.5) * 0.6,
+    dy: (Math.random() - 0.5) * 0.6,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    opacity: Math.random() * 0.5 + 0.2,
+    twinkle: Math.random() * Math.PI * 2,
+    twinkleSpeed: (Math.random() * 0.02) + 0.01,
+  };
+}
+
+for (let i = 0; i < 120; i++) particles.push(mkParticle());
+
+/* connect nearby particles with thin lines */
+function connectParticles() {
+  const maxDist = 110;
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d  = Math.sqrt(dx*dx + dy*dy);
+      if (d < maxDist) {
+        const alpha = (1 - d/maxDist) * 0.12;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(192,132,252,${alpha})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  connectParticles();
+  particles.forEach(p => {
+    p.twinkle += p.twinkleSpeed;
+    const glowAlpha = p.opacity + Math.sin(p.twinkle) * 0.15;
+
+    /* glow halo */
+    const grad = ctx.createRadialGradient(p.x,p.y,0, p.x,p.y,p.r*5);
+    grad.addColorStop(0, p.color.replace(')', `,${glowAlpha * 0.6})`).replace('rgb','rgba'));
+    grad.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    /* core dot */
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = glowAlpha;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > W) p.dx *= -1;
+    if (p.y < 0 || p.y > H) p.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* ── ENTER KEY SUPPORT ── */
+document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
 </script>
-
 </body>
 </html>
