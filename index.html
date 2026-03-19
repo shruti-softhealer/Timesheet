@@ -9,340 +9,377 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --pink: #ff6eb4;
-      --lavender: #c084fc;
-      --sky: #67e8f9;
-      --mint: #6ee7b7;
-      --gold: #fbbf24;
-      --card-bg: rgba(10, 6, 20, 0.72);
+      --bg: #060412;
+      --card-bg: rgba(10,6,20,0.72);
       --border: rgba(255,255,255,0.08);
       --text: #f0e8ff;
       --muted: rgba(240,232,255,0.45);
+      --input-bg: rgba(255,255,255,0.05);
+      --input-border: rgba(255,255,255,0.1);
+      --input-color: white;
+      --input-ph: rgba(255,255,255,0.25);
+      --clock-bg: rgba(255,255,255,0.04);
+      --btn-grad: linear-gradient(135deg,#a855f7,#ec4899,#f59e0b);
+      --shimmer: linear-gradient(90deg,transparent,#c084fc,#f472b6,#67e8f9,transparent);
+      --result-bg: linear-gradient(135deg,rgba(168,85,247,.18),rgba(236,72,153,.12),rgba(6,182,212,.12));
+      --badge-bg: rgba(255,255,255,0.07);
+      --dot: #6ee7b7;
+      --a1: #c084fc; --a2: #f472b6; --a3: #67e8f9;
+    }
+
+    /* LIGHT */
+    body.light {
+      --bg: #eef2ff;
+      --card-bg: rgba(255,255,255,0.85);
+      --border: rgba(0,0,0,0.08);
+      --text: #1a1040;
+      --muted: rgba(60,40,100,0.5);
+      --input-bg: rgba(0,0,0,0.04);
+      --input-border: rgba(0,0,0,0.12);
+      --input-color: #1a1040;
+      --input-ph: rgba(60,40,100,0.3);
+      --clock-bg: rgba(0,0,0,0.04);
+      --badge-bg: rgba(0,0,0,0.05);
+    }
+
+    /* BARBIE */
+    body.barbie {
+      --bg: #ff1aac;
+      --card-bg: rgba(180,0,100,0.3);
+      --border: rgba(255,255,255,0.3);
+      --text: #fff;
+      --muted: rgba(255,210,235,0.7);
+      --input-bg: rgba(255,255,255,0.18);
+      --input-border: rgba(255,255,255,0.4);
+      --input-color: #fff;
+      --input-ph: rgba(255,200,230,0.5);
+      --clock-bg: rgba(255,255,255,0.12);
+      --btn-grad: linear-gradient(135deg,#ff69b4,#ff1493,#e91e8c);
+      --shimmer: linear-gradient(90deg,transparent,#fff,#ffb6c1,#fff,transparent);
+      --result-bg: linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,105,180,0.2));
+      --badge-bg: rgba(255,255,255,0.15);
+      --dot: #ffb6c1;
+      --a1: #fff; --a2: #ffb6c1; --a3: #ff69b4;
+    }
+
+    /* FAIRY */
+    body.fairy {
+      --bg: #0a001a;
+      --card-bg: rgba(20,5,50,0.65);
+      --border: rgba(200,150,255,0.15);
+      --text: #f8e8ff;
+      --muted: rgba(220,180,255,0.5);
+      --input-bg: rgba(180,100,255,0.08);
+      --input-border: rgba(200,150,255,0.2);
+      --input-color: #f8e8ff;
+      --input-ph: rgba(200,150,255,0.35);
+      --clock-bg: rgba(180,100,255,0.08);
+      --btn-grad: linear-gradient(135deg,#9b30ff,#e040fb,#7c4dff);
+      --shimmer: linear-gradient(90deg,transparent,#e040fb,#ce93d8,#b39ddb,transparent);
+      --result-bg: linear-gradient(135deg,rgba(156,39,176,.2),rgba(103,58,183,.15));
+      --badge-bg: rgba(180,100,255,0.12);
+      --dot: #ce93d8;
+      --a1: #e040fb; --a2: #ce93d8; --a3: #b39ddb;
+    }
+
+    /* RACING */
+    body.racing {
+      --bg: #0d0d0d;
+      --card-bg: rgba(10,10,10,0.82);
+      --border: rgba(255,50,0,0.22);
+      --text: #fff;
+      --muted: rgba(255,200,150,0.55);
+      --input-bg: rgba(255,255,255,0.05);
+      --input-border: rgba(255,50,0,0.28);
+      --input-color: #fff;
+      --input-ph: rgba(255,150,100,0.35);
+      --clock-bg: rgba(255,50,0,0.07);
+      --btn-grad: linear-gradient(135deg,#ff3200,#ff6a00,#ff0000);
+      --shimmer: linear-gradient(90deg,transparent,#ff3200,#ff6a00,#ffd700,transparent);
+      --result-bg: linear-gradient(135deg,rgba(255,50,0,.18),rgba(255,106,0,.12));
+      --badge-bg: rgba(255,50,0,0.1);
+      --dot: #ff3200;
+      --a1: #ff3200; --a2: #ff6a00; --a3: #ffd700;
     }
 
     body {
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      background: #060412;
+      background: var(--bg);
       color: var(--text);
+      transition: background 0.5s;
     }
 
-    /* ── BACKGROUND CANVAS ── */
-    canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+    canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
 
-    /* ── FLOATING BLOBS ── */
-    .blobs {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-      pointer-events: none;
-    }
+    .blobs { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
     .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.25;
-      animation: blobFloat linear infinite;
+      position:absolute; border-radius:50%; filter:blur(80px); opacity:0.25;
+      animation:blobFloat linear infinite;
     }
-    .blob:nth-child(1){ width:420px;height:420px;background:var(--lavender);top:-10%;left:-5%;animation-duration:18s;animation-delay:0s; }
-    .blob:nth-child(2){ width:320px;height:320px;background:var(--pink);top:60%;left:65%;animation-duration:22s;animation-delay:-5s; }
-    .blob:nth-child(3){ width:280px;height:280px;background:var(--sky);top:30%;left:80%;animation-duration:16s;animation-delay:-9s; }
-    .blob:nth-child(4){ width:360px;height:360px;background:var(--mint);top:75%;left:-8%;animation-duration:25s;animation-delay:-3s; }
-    .blob:nth-child(5){ width:200px;height:200px;background:var(--gold);top:10%;left:55%;animation-duration:20s;animation-delay:-12s; }
-
+    .blob:nth-child(1){ width:420px;height:420px;background:var(--a1);top:-10%;left:-5%;animation-duration:18s; }
+    .blob:nth-child(2){ width:320px;height:320px;background:var(--a2);top:60%;left:65%;animation-duration:22s;animation-delay:-5s; }
+    .blob:nth-child(3){ width:280px;height:280px;background:var(--a3);top:30%;left:80%;animation-duration:16s;animation-delay:-9s; }
+    .blob:nth-child(4){ width:360px;height:360px;background:var(--a1);top:75%;left:-8%;animation-duration:25s;animation-delay:-3s; }
+    .blob:nth-child(5){ width:200px;height:200px;background:var(--a2);top:10%;left:55%;animation-duration:20s;animation-delay:-12s; }
     @keyframes blobFloat {
-      0%   { transform: translate(0,0) scale(1); }
-      25%  { transform: translate(30px,-40px) scale(1.08); }
-      50%  { transform: translate(-20px,30px) scale(0.95); }
-      75%  { transform: translate(40px,20px) scale(1.05); }
-      100% { transform: translate(0,0) scale(1); }
+      0%  {transform:translate(0,0) scale(1);}
+      25% {transform:translate(30px,-40px) scale(1.08);}
+      50% {transform:translate(-20px,30px) scale(0.95);}
+      75% {transform:translate(40px,20px) scale(1.05);}
+      100%{transform:translate(0,0) scale(1);}
     }
+    body.light .blob { opacity:0.1; }
+
+    /* ── CONTROL BAR ── */
+    .controls {
+      position:fixed; top:16px; right:16px; z-index:100;
+      display:flex; gap:8px; align-items:center;
+    }
+    .ctrl-btn {
+      padding:8px 14px; border-radius:50px;
+      border:1px solid var(--border);
+      background:var(--card-bg);
+      color:var(--text);
+      font-family:'DM Sans',sans-serif;
+      font-size:0.78rem; font-weight:600;
+      cursor:pointer;
+      backdrop-filter:blur(16px);
+      transition:transform 0.15s, box-shadow 0.15s, background 0.3s, color 0.3s;
+      white-space:nowrap;
+    }
+    .ctrl-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+    .ctrl-btn:active { transform:scale(0.95); }
+
+    .theme-label {
+      position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+      z-index:100;
+      background:var(--card-bg); backdrop-filter:blur(16px);
+      border:1px solid var(--border); border-radius:50px;
+      padding:6px 20px; font-size:0.72rem; font-weight:600;
+      letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--muted); pointer-events:none;
+      opacity:0; transition:opacity 0.4s;
+    }
+    .theme-label.show { opacity:1; }
 
     /* ── CARD ── */
     .card {
-      position: relative;
-      z-index: 10;
-      width: 380px;
-      background: var(--card-bg);
-      backdrop-filter: blur(32px) saturate(180%);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 36px 32px 32px;
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.04),
-        0 24px 60px rgba(0,0,0,0.55),
-        0 0 80px rgba(192,132,252,0.1);
-      animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
+      position:relative; z-index:10; width:380px;
+      background:var(--card-bg);
+      backdrop-filter:blur(32px) saturate(180%);
+      border:1px solid var(--border);
+      border-radius:28px; padding:36px 32px 32px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.45),0 0 80px rgba(192,132,252,0.08);
+      transition:background 0.4s, border-color 0.4s, box-shadow 0.4s;
+      animation:cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
     }
-    @keyframes cardIn {
-      from { opacity:0; transform:translateY(30px) scale(0.96); }
-      to   { opacity:1; transform:translateY(0) scale(1); }
-    }
-
-    /* shimmering top border */
+    @keyframes cardIn{from{opacity:0;transform:translateY(30px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
     .card::before {
-      content:'';
-      position:absolute;
-      top:0; left:10%; right:10%;
-      height:1px;
-      background: linear-gradient(90deg, transparent, var(--lavender), var(--pink), var(--sky), transparent);
-      border-radius:999px;
-      animation: shimmerLine 3s ease-in-out infinite;
+      content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+      background:var(--shimmer); border-radius:999px;
+      animation:shimmerLine 3s ease-in-out infinite;
     }
-    @keyframes shimmerLine {
-      0%,100%{ opacity:0.5; transform:scaleX(0.8); }
-      50%{ opacity:1; transform:scaleX(1); }
-    }
+    @keyframes shimmerLine{0%,100%{opacity:0.5;transform:scaleX(0.8)}50%{opacity:1;transform:scaleX(1)}}
+    body.barbie .card { box-shadow:0 24px 60px rgba(255,20,147,0.35),0 0 60px rgba(255,105,180,0.2); }
+    body.fairy  .card { box-shadow:0 24px 60px rgba(0,0,0,0.6),0 0 80px rgba(156,39,176,0.25); }
+    body.racing .card { box-shadow:0 24px 60px rgba(0,0,0,0.7),0 0 60px rgba(255,50,0,0.18); }
 
     /* ── HEADER ── */
-    .header { text-align:center; margin-bottom:28px; }
+    .header { text-align:center; margin-bottom:22px; }
     .emoji-icon {
-      font-size: 2.2rem;
-      display: block;
-      margin-bottom: 8px;
-      animation: iconBob 2.5s ease-in-out infinite;
-      transition: opacity 0.7s;
+      font-size:2.2rem; display:block; margin-bottom:8px;
+      animation:iconBob 2.5s ease-in-out infinite;
+      transition:opacity 0.7s;
     }
-    @keyframes iconBob {
-      0%,100%{ transform:translateY(0); }
-      50%{ transform:translateY(-6px); }
-    }
+    @keyframes iconBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
     .title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      font-style: italic;
-      line-height: 1.45;
-      background: linear-gradient(120deg, var(--lavender), var(--pink), var(--sky));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 0.01px;
-      transition: opacity 0.7s;
+      font-family:'Playfair Display',serif;
+      font-size:1.05rem; font-style:italic; line-height:1.45;
+      background:linear-gradient(120deg,var(--a1),var(--a2),var(--a3));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      transition:opacity 0.7s;
     }
-    .subtitle {
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 5px;
-      letter-spacing: 0.06em;
-      font-style: normal;
-      transition: opacity 0.7s;
-    }
+    body.racing .title { font-family:'DM Sans',sans-serif; font-style:normal; font-weight:700; font-size:0.92rem; }
+    .subtitle { font-size:0.72rem; color:var(--muted); margin-top:5px; letter-spacing:0.06em; transition:opacity 0.7s; }
 
-    /* ── LIVE CLOCK ── */
+    /* ── CLOCK ── */
     .clock-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 10px 16px;
-      margin-bottom: 24px;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      background:var(--clock-bg); border:1px solid var(--border);
+      border-radius:14px; padding:10px 16px; margin-bottom:18px;
+      transition:background 0.4s;
     }
     .clock-dot {
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      background: var(--mint);
-      box-shadow: 0 0 8px var(--mint);
-      animation: pulse 1.5s ease-in-out infinite;
+      width:7px; height:7px; border-radius:50%;
+      background:var(--dot); box-shadow:0 0 8px var(--dot);
+      animation:pulse 1.5s ease-in-out infinite;
     }
-    @keyframes pulse {
-      0%,100%{ opacity:1; transform:scale(1); }
-      50%{ opacity:0.4; transform:scale(0.7); }
-    }
-    #clock {
-      font-size: 0.88rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      color: var(--text);
-    }
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+    #clock { font-size:0.88rem; font-weight:500; letter-spacing:0.04em; color:var(--text); }
 
     /* ── INPUTS ── */
-    .field {
-      margin-bottom: 16px;
-    }
+    .field { margin-bottom:13px; }
     .field label {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 7px;
+      display:block; font-size:0.72rem; font-weight:600;
+      letter-spacing:0.1em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:6px;
     }
-    .input-wrap {
-      position: relative;
+    .input-wrap { position:relative; }
+    .input-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:1rem; pointer-events:none; }
+    input[type="text"] {
+      width:100%; padding:13px 14px 13px 40px;
+      background:var(--input-bg); border:1px solid var(--input-border);
+      border-radius:14px; color:var(--input-color);
+      font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:500;
+      outline:none;
+      transition:border-color 0.25s,box-shadow 0.25s,background 0.25s,color 0.25s;
     }
-    .input-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      pointer-events: none;
-    }
-    input[type="text"], input[type="time"] {
-      width: 100%;
-      padding: 13px 14px 13px 40px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      color: white;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-      -webkit-appearance: none;
-    }
-    input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
-    input[type="text"]:focus, input[type="time"]:focus {
-      border-color: var(--lavender);
-      background: rgba(192,132,252,0.07);
-      box-shadow: 0 0 0 3px rgba(192,132,252,0.15);
-    }
-    /* hide ugly time picker chrome */
-    input[type="time"]::-webkit-calendar-picker-indicator {
-      filter: invert(1) opacity(0.4);
-      cursor: pointer;
+    input[type="text"]::placeholder { color:var(--input-ph); }
+    input[type="text"]:focus {
+      border-color:var(--a1);
+      box-shadow:0 0 0 3px rgba(168,85,247,0.18);
     }
 
-    /* ── BUTTON ── */
-    button {
-      width: 100%;
-      padding: 15px;
-      margin-top: 4px;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #a855f7, #ec4899, #f59e0b);
-      background-size: 200% 200%;
-      color: white;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      letter-spacing: 0.03em;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.15s, box-shadow 0.15s;
-      animation: gradientShift 4s ease infinite;
+    /* ── CALC BUTTON ── */
+    .calc-btn {
+      width:100%; padding:15px; margin-top:4px;
+      border:none; border-radius:16px;
+      background:var(--btn-grad); background-size:200% 200%;
+      color:white; font-family:'DM Sans',sans-serif;
+      font-size:1rem; font-weight:600; cursor:pointer;
+      letter-spacing:0.03em; position:relative; overflow:hidden;
+      transition:transform 0.15s,box-shadow 0.15s;
+      animation:gradShift 4s ease infinite;
     }
-    @keyframes gradientShift {
-      0%{ background-position:0% 50%; }
-      50%{ background-position:100% 50%; }
-      100%{ background-position:0% 50%; }
-    }
-    button::after {
-      content:'';
-      position:absolute;
-      inset:0;
-      background:linear-gradient(rgba(255,255,255,0.15), transparent);
+    @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .calc-btn::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(rgba(255,255,255,0.15),transparent);
       pointer-events:none;
     }
-    button:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(168,85,247,0.4); }
-    button:active { transform:translateY(0); }
+    .calc-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(168,85,247,0.35); }
+    .calc-btn:active { transform:translateY(0); }
 
     /* ── RESULT ── */
-    .result {
-      margin-top: 20px;
-      border-radius: 18px;
-      overflow: hidden;
-      display: none;
-    }
-    .result.show { display: block; animation: resultIn 0.5s cubic-bezier(.22,1,.36,1) both; }
-    @keyframes resultIn {
-      from{ opacity:0; transform:translateY(12px) scale(0.97); }
-      to  { opacity:1; transform:translateY(0) scale(1); }
-    }
+    .result { margin-top:16px; display:none; }
+    .result.show { display:block; animation:resultIn 0.5s cubic-bezier(.22,1,.36,1) both; }
+    @keyframes resultIn{from{opacity:0;transform:translateY(12px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
     .result-inner {
-      background: linear-gradient(135deg, rgba(168,85,247,0.18), rgba(236,72,153,0.12), rgba(6,182,212,0.12));
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
+      background:var(--result-bg); border:1px solid var(--border);
+      border-radius:18px; padding:20px; text-align:center;
+      transition:background 0.4s;
     }
-    .result-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
+    .result-label { font-size:0.7rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
     .result-time {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
-      background: linear-gradient(120deg, #c084fc, #f472b6, #67e8f9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
+      font-family:'Playfair Display',serif; font-size:2.2rem;
+      background:linear-gradient(120deg,var(--a1),var(--a2),var(--a3));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      line-height:1.1;
     }
-    .result-sub {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-    .result-extra {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 14px;
-    }
+    body.racing .result-time { font-family:'DM Sans',sans-serif; font-weight:700; }
+    .result-sub { font-size:0.78rem; color:var(--muted); margin-top:6px; }
+    .result-extra { display:flex; justify-content:center; gap:12px; margin-top:14px; flex-wrap:wrap; }
     .badge {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      padding: 7px 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      background:var(--badge-bg); border:1px solid var(--border);
+      border-radius:10px; padding:7px 14px;
+      font-size:0.75rem; font-weight:600; color:var(--text);
     }
-    .badge span { color: var(--muted); font-weight:400; margin-right:4px; }
-    .over { color: #f87171; }
-    .ok  { color: var(--mint); }
+    .badge span { color:var(--muted); font-weight:400; margin-right:4px; }
+    .ok { color:#6ee7b7; }
 
     /* ── ERROR ── */
     .error-msg {
-      display:none;
-      margin-top:14px;
-      background:rgba(239,68,68,0.12);
-      border:1px solid rgba(239,68,68,0.3);
-      border-radius:12px;
-      padding:10px 14px;
-      font-size:0.8rem;
-      color:#fca5a5;
-      text-align:center;
+      display:none; margin-top:12px;
+      background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3);
+      border-radius:12px; padding:10px 14px;
+      font-size:0.8rem; color:#fca5a5; text-align:center;
     }
     .error-msg.show { display:block; animation:resultIn 0.4s both; }
+
+    /* ══ BARBIE RAIN ══ */
+    .barbie-rain { display:none; position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    body.barbie .barbie-rain { display:block; }
+    .b-item {
+      position:absolute; top:-60px;
+      animation:rainFall linear infinite;
+      opacity:0.75;
+    }
+    @keyframes rainFall {
+      0%  {transform:translateY(-60px) rotate(-10deg);opacity:0;}
+      10% {opacity:0.75;}
+      90% {opacity:0.75;}
+      100%{transform:translateY(110vh) rotate(20deg);opacity:0;}
+    }
+
+    /* ══ FAIRY SPARKLES ══ */
+    .fairy-layer { display:none; position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    body.fairy .fairy-layer { display:block; }
+    .f-star {
+      position:absolute; border-radius:50%; background:white;
+      animation:fTwinkle ease-in-out infinite;
+    }
+    @keyframes fTwinkle{0%,100%{opacity:0.1;transform:scale(0.5)}50%{opacity:1;transform:scale(1.6)}}
+    .f-drift {
+      position:absolute; border-radius:50%;
+      animation:fDrift linear infinite;
+    }
+    @keyframes fDrift {
+      0%  {transform:translate(0,0) scale(1);opacity:0.8;}
+      100%{transform:translate(var(--dx),var(--dy)) scale(0);opacity:0;}
+    }
+
+    /* ══ RACING LAYER ══ */
+    .racing-layer { display:none; position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+    body.racing .racing-layer { display:block; }
+    .r-stripe {
+      position:absolute; width:8px; height:60px;
+      background:rgba(255,200,0,0.55); border-radius:4px;
+      animation:rStripe linear infinite;
+    }
+    @keyframes rStripe{0%{transform:translateY(-80px);opacity:1}100%{transform:translateY(110vh);opacity:0.4}}
+    .r-line {
+      position:absolute; height:1px;
+      background:linear-gradient(90deg,transparent,rgba(255,100,0,0.65),transparent);
+      animation:rLine linear infinite;
+    }
+    @keyframes rLine{0%{transform:translateX(0);opacity:0}20%{opacity:1}100%{transform:translateX(-120vw);opacity:0}}
+    .r-car {
+      position:absolute; font-size:3.5rem;
+      animation:rZoom linear infinite;
+      filter:drop-shadow(0 0 14px rgba(255,50,0,0.9));
+    }
+    @keyframes rZoom{0%{transform:translateX(110vw) scaleX(-1)}100%{transform:translateX(-20vw) scaleX(-1)}}
   </style>
 </head>
 <body>
 
-<div class="blobs">
-  <div class="blob"></div>
-  <div class="blob"></div>
-  <div class="blob"></div>
-  <div class="blob"></div>
-  <div class="blob"></div>
+<!-- CONTROLS -->
+<div class="controls">
+  <button class="ctrl-btn" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+  <button class="ctrl-btn" id="modeBtn" onclick="cycleTheme()">🎨 Barbie →</button>
 </div>
+<div class="theme-label" id="themeLabel"></div>
 
+<!-- BLOBS + CANVAS -->
+<div class="blobs">
+  <div class="blob"></div><div class="blob"></div><div class="blob"></div>
+  <div class="blob"></div><div class="blob"></div>
+</div>
 <canvas id="bg"></canvas>
 
+<!-- SPECIAL LAYERS -->
+<div class="barbie-rain" id="barbieRain"></div>
+<div class="fairy-layer"  id="fairyLayer"></div>
+<div class="racing-layer" id="racingLayer"></div>
+
+<!-- CARD -->
 <div class="card">
   <div class="header">
     <span class="emoji-icon" id="quoteEmoji">✨</span>
-    <div class="title" id="quoteText">Loading…</div>
+    <div class="title"    id="quoteText">Loading…</div>
     <div class="subtitle" id="quoteAuthor">— …</div>
   </div>
 
@@ -367,247 +404,383 @@
     </div>
   </div>
 
-  <button onclick="calculate()">✨ Calculate Leave Time</button>
+  <button class="calc-btn" onclick="calculate()">✨ Calculate Leave Time</button>
 
   <div class="error-msg" id="errorMsg"></div>
 
   <div class="result" id="result">
     <div class="result-inner">
-      <div class="result-label">🏠 You can go home at</div>
-      <div class="result-time" id="leaveTime">—</div>
-      <div class="result-sub" id="remainingLabel"></div>
+      <div class="result-label" id="resultLabel">🏠 You can go home at</div>
+      <div class="result-time"  id="leaveTime">—</div>
+      <div class="result-sub"   id="remainingLabel"></div>
       <div class="result-extra">
-        <div class="badge" id="badge1"><span>Remaining</span><span id="remainVal">—</span></div>
-        <div class="badge" id="badge2"><span>Status</span><span id="statusVal">—</span></div>
+        <div class="badge"><span>Remaining</span><span id="remainVal">—</span></div>
+        <div class="badge"><span>Status</span><span id="statusVal">—</span></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-/* ── QUOTES ── */
-const quotes = [
-  { emoji:'🌅', text:'Every hour worked is a step closer to your dreams.', author:'— Unknown' },
-  { emoji:'💪', text:'Hard work beats talent when talent doesn\'t work hard.', author:'— Tim Notke' },
-  { emoji:'🔥', text:'Push yourself, because no one else is going to do it for you.', author:'— Unknown' },
-  { emoji:'🌟', text:'Small progress is still progress.', author:'— Unknown' },
-  { emoji:'☀️', text:'The secret of getting ahead is getting started.', author:'— Mark Twain' },
-  { emoji:'🚀', text:'Dream big. Work hard. Stay humble.', author:'— Unknown' },
-  { emoji:'🎯', text:'Focus on being productive instead of busy.', author:'— Tim Ferriss' },
-  { emoji:'🌸', text:'You are capable of amazing things.', author:'— Unknown' },
-  { emoji:'⚡', text:'Don\'t watch the clock; do what it does. Keep going.', author:'— Sam Levenson' },
-  { emoji:'🌈', text:'The day you plant the seed is not the day you eat the fruit.', author:'— Fabienne Fredrickson' },
-];
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let themeIdx = 0;   // 0=normal 1=barbie 2=fairy 3=racing
+let isDark   = true;
 
-let currentQuote = Math.floor(Math.random() * quotes.length);
+const CLASSES    = ['','barbie','fairy','racing'];
+const NAMES      = ['🌌 Cosmic','💖 Barbie Sugar Rush','🧚 True Fairy Tale','🏎️ Racing Car'];
+const NEXT_LABEL = ['🎨 Barbie →','🧚 Fairy →','🏎️ Racing →','🌌 Normal →'];
 
-function showQuote(idx) {
-  const q = quotes[idx];
-  const emojiEl  = document.getElementById('quoteEmoji');
-  const textEl   = document.getElementById('quoteText');
-  const authorEl = document.getElementById('quoteAuthor');
-  // fade out
-  [emojiEl, textEl, authorEl].forEach(el => el.style.opacity = '0');
-  setTimeout(() => {
-    emojiEl.textContent  = q.emoji;
-    textEl.textContent   = q.text;
-    authorEl.textContent = q.author;
-    [emojiEl, textEl, authorEl].forEach(el => el.style.transition = 'opacity 0.7s');
-    [emojiEl, textEl, authorEl].forEach(el => el.style.opacity = '1');
-  }, 400);
-}
+/* ══════════════════════════════════════
+   APPLY THEME
+══════════════════════════════════════ */
+function applyTheme() {
+  document.body.classList.remove('light','barbie','fairy','racing');
 
-showQuote(currentQuote);
-setInterval(() => {
-  currentQuote = (currentQuote + 1) % quotes.length;
-  showQuote(currentQuote);
-}, 8000);
-
-/* ── CLOCK (12-hour) ── */
-function updateClock() {
-  const now = new Date();
-  let h = now.getHours();
-  const m  = String(now.getMinutes()).padStart(2, '0');
-  const s  = String(now.getSeconds()).padStart(2, '0');
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;
-  document.getElementById('clock').textContent = `Live • ${h}:${m}:${s} ${ampm}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-/* ── PARSE HH:MM (flexible) ── */
-function parseTime(str) {
-  str = str.trim().replace(/[^\d:]/g, '');
-  if (!str) return null;
-  let parts = str.split(':');
-  let h = parseInt(parts[0], 10);
-  let m = parts[1] !== undefined ? parseInt(parts[1], 10) : 0;
-  if (isNaN(h)) return null;
-  if (isNaN(m)) m = 0;
-  return h * 60 + m;
-}
-
-/* ── FORMAT minutes → H:MM AM/PM ── */
-function fmtTime(totalMins) {
-  totalMins = ((totalMins % 1440) + 1440) % 1440; // wrap around midnight
-  let h = Math.floor(totalMins / 60);
-  let m = totalMins % 60;
-  let ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12;
-  if (h === 0) h = 12;
-  return `${h}:${String(m).padStart(2, '0')} ${ampm}`;
-}
-
-/* ── FORMAT minutes → Xh Ym ── */
-function fmtDuration(mins) {
-  let sign = mins < 0 ? '-' : '';
-  mins = Math.abs(mins);
-  let h = Math.floor(mins / 60);
-  let m = mins % 60;
-  if (h === 0) return `${sign}${m}m`;
-  if (m === 0) return `${sign}${h}h`;
-  return `${sign}${h}h ${m}m`;
-}
-
-function showError(msg) {
-  const el = document.getElementById('errorMsg');
-  el.textContent = msg;
-  el.classList.add('show');
-  document.getElementById('result').classList.remove('show');
-}
-
-function hideError() {
-  document.getElementById('errorMsg').classList.remove('show');
-}
-
-function calculate() {
-  hideError();
-  const completedMins = parseTime(document.getElementById('completed').value);
-  const requiredMins  = parseTime(document.getElementById('required').value);
-
-  if (completedMins === null || completedMins < 0) {
-    showError('⚠️ Please enter a valid Completed time (e.g. 4:00 or 4:30)');
-    return;
-  }
-  if (requiredMins === null || requiredMins <= 0) {
-    showError('⚠️ Please enter a valid Required hours (e.g. 8:20)');
-    return;
-  }
-
-  const now = new Date();
-  const currentMins = now.getHours() * 60 + now.getMinutes();
-  const remaining   = requiredMins - completedMins;
-  const leaveMins   = currentMins + remaining;
-
-  document.getElementById('leaveTime').textContent = fmtTime(leaveMins);
-
-  if (remaining <= 0) {
-    document.getElementById('remainingLabel').textContent = 'You\'ve already completed your required hours! 🎉';
-    document.getElementById('remainVal').textContent  = '0m';
-    document.getElementById('statusVal').textContent  = '✅ Done';
-    document.getElementById('statusVal').className    = 'ok';
+  if (themeIdx === 0) {
+    if (!isDark) document.body.classList.add('light');
   } else {
-    document.getElementById('remainingLabel').textContent = `${fmtDuration(remaining)} left to work`;
-    document.getElementById('remainVal').textContent = fmtDuration(remaining);
-    if (remaining > requiredMins * 0.5) {
-      document.getElementById('statusVal').textContent = '⏳ Keep going';
-      document.getElementById('statusVal').className = '';
-    } else {
-      document.getElementById('statusVal').textContent = '🚀 Almost there';
-      document.getElementById('statusVal').className = 'ok';
-    }
+    document.body.classList.add(CLASSES[themeIdx]);
   }
 
+  // dark toggle button
+  const db = document.getElementById('darkBtn');
+  if (themeIdx === 0) {
+    db.style.opacity = '1';
+    db.textContent   = isDark ? '🌙 Dark' : '☀️ Light';
+  } else {
+    db.style.opacity = '0.35';
+    db.textContent   = '🌙 Dark';
+  }
+
+  document.getElementById('modeBtn').textContent = NEXT_LABEL[themeIdx];
+  showLabel(NAMES[themeIdx]);
+
+  rebuildParticles();
+  buildBarbieRain();
+  buildFairyLayer();
+  buildRacingLayer();
+  refreshQuotes();
+  updateClock();
+}
+
+let labelT;
+function showLabel(t) {
+  const el = document.getElementById('themeLabel');
+  el.textContent = t;
+  el.classList.add('show');
+  clearTimeout(labelT);
+  labelT = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function toggleDark() {
+  if (themeIdx !== 0) return;
+  isDark = !isDark;
+  applyTheme();
+}
+
+function cycleTheme() {
+  themeIdx = (themeIdx + 1) % 4;
+  applyTheme();
+}
+
+/* ══════════════════════════════════════
+   QUOTES
+══════════════════════════════════════ */
+const QUOTES = {
+  0: [
+    {e:'🌅',t:'Every hour worked is a step closer to your dreams.',a:'— Unknown'},
+    {e:'💪',t:"Hard work beats talent when talent doesn't work hard.",a:'— Tim Notke'},
+    {e:'🔥',t:'Push yourself, because no one else is going to do it for you.',a:'— Unknown'},
+    {e:'🌟',t:'Small progress is still progress.',a:'— Unknown'},
+    {e:'⚡',t:"Don't watch the clock; do what it does. Keep going.",a:'— Sam Levenson'},
+    {e:'☀️',t:'The secret of getting ahead is getting started.',a:'— Mark Twain'},
+  ],
+  1: [
+    {e:'💅',t:'You can be anything. Why not be fabulous?',a:'— Barbie vibes'},
+    {e:'👑',t:"Life in plastic — it's fantastic!",a:'— Sugar Rush'},
+    {e:'💕',t:'Be the girl who decided to go for it.',a:'— Pink Energy'},
+    {e:'🎀',t:'Confidence looks good on everyone.',a:'— Barbie world'},
+    {e:'🌸',t:'She is clothed in strength and sparkle.',a:'— Barbie spirit'},
+  ],
+  2: [
+    {e:'🧚',t:'Believe in a little magic and a lot of hard work.',a:'— Fairy wisdom'},
+    {e:'🌙',t:"Stars can't shine without darkness.",a:'— Unknown'},
+    {e:'✨',t:"Magic is just science we don't understand yet.",a:'— Arthur C. Clarke'},
+    {e:'🦋',t:'She believed she could, so she did.',a:'— R.S. Grey'},
+    {e:'🔮',t:'Sprinkle a little fairy dust on everything.',a:'— True fairy tale'},
+  ],
+  3: [
+    {e:'🏎️',t:"The race is long, and in the end, it's only with yourself.",a:'— Mary Schmich'},
+    {e:'🔥',t:"Speed is irrelevant if you're going in the wrong direction.",a:'— Gandhi'},
+    {e:'🏁',t:'Winners never quit, quitters never win.',a:'— Vince Lombardi'},
+    {e:'⚡',t:'Go fast enough to get there, slow enough to see.',a:'— Jimmy Buffett'},
+    {e:'🚀',t:'Full throttle. No regrets.',a:'— Racing spirit'},
+  ],
+};
+
+let qPool=[], qIdx=0, qTimer;
+function refreshQuotes() {
+  qPool = QUOTES[themeIdx];
+  qIdx  = Math.floor(Math.random()*qPool.length);
+  clearInterval(qTimer);
+  renderQuote();
+  qTimer = setInterval(() => { qIdx=(qIdx+1)%qPool.length; renderQuote(); }, 8000);
+}
+function renderQuote() {
+  const q=qPool[qIdx];
+  const ids=['quoteEmoji','quoteText','quoteAuthor'];
+  const vals=[q.e,q.t,q.a];
+  ids.forEach(id=>{ document.getElementById(id).style.opacity='0'; });
+  setTimeout(() => {
+    ids.forEach((id,i) => {
+      const el=document.getElementById(id);
+      el.textContent=vals[i];
+      el.style.transition='opacity 0.7s';
+      el.style.opacity='1';
+    });
+  }, 380);
+}
+
+/* ══════════════════════════════════════
+   CLOCK (12-hour)
+══════════════════════════════════════ */
+function updateClock() {
+  const now=new Date();
+  let h=now.getHours();
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  const ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  const pre = themeIdx===3 ? '🏁' : 'Live •';
+  document.getElementById('clock').textContent=`${pre} ${h}:${m}:${s} ${ap}`;
+}
+setInterval(updateClock,1000);
+
+/* ══════════════════════════════════════
+   CALCULATE
+══════════════════════════════════════ */
+function parseTime(str) {
+  str=str.trim().replace(/[^\d:]/g,'');
+  if(!str) return null;
+  const p=str.split(':');
+  let h=parseInt(p[0],10), m=p[1]!==undefined?parseInt(p[1],10):0;
+  if(isNaN(h)) return null;
+  if(isNaN(m)) m=0;
+  return h*60+m;
+}
+function fmtTime(mins) {
+  mins=((mins%1440)+1440)%1440;
+  let h=Math.floor(mins/60), m=mins%60;
+  const ap=h>=12?'PM':'AM';
+  h=h%12||12;
+  return `${h}:${String(m).padStart(2,'0')} ${ap}`;
+}
+function fmtDur(mins) {
+  const s=mins<0?'-':''; mins=Math.abs(mins);
+  const h=Math.floor(mins/60),m=mins%60;
+  if(h===0) return `${s}${m}m`;
+  if(m===0) return `${s}${h}h`;
+  return `${s}${h}h ${m}m`;
+}
+function calculate() {
+  const err=document.getElementById('errorMsg');
+  err.classList.remove('show');
+  const c=parseTime(document.getElementById('completed').value);
+  const r=parseTime(document.getElementById('required').value);
+  if(c===null||c<0){ err.textContent='⚠️ Enter a valid Completed time (e.g. 4:00)'; err.classList.add('show'); document.getElementById('result').classList.remove('show'); return; }
+  if(!r||r<=0){      err.textContent='⚠️ Enter a valid Required hours (e.g. 8:20)';  err.classList.add('show'); document.getElementById('result').classList.remove('show'); return; }
+  const now=new Date(), cur=now.getHours()*60+now.getMinutes();
+  const rem=r-c, leave=cur+rem;
+  document.getElementById('leaveTime').textContent=fmtTime(leave);
+  const icons=['🏠','💖','🧚','🏁'];
+  document.getElementById('resultLabel').textContent=`${icons[themeIdx]} You can go home at`;
+  if(rem<=0){
+    document.getElementById('remainingLabel').textContent="You've already completed your hours! 🎉";
+    document.getElementById('remainVal').textContent='0m';
+    document.getElementById('statusVal').textContent='✅ Done';
+    document.getElementById('statusVal').className='ok';
+  } else {
+    document.getElementById('remainingLabel').textContent=`${fmtDur(rem)} left to work`;
+    document.getElementById('remainVal').textContent=fmtDur(rem);
+    if(rem>r*0.5){ document.getElementById('statusVal').textContent='⏳ Keep going'; document.getElementById('statusVal').className=''; }
+    else          { document.getElementById('statusVal').textContent='🚀 Almost there'; document.getElementById('statusVal').className='ok'; }
+  }
   document.getElementById('result').classList.add('show');
 }
 
-/* ── PARTICLE CANVAS ── */
-const canvas = document.getElementById('bg');
-const ctx    = canvas.getContext('2d');
-let W, H, particles = [];
+/* ══════════════════════════════════════
+   PARTICLE CANVAS
+══════════════════════════════════════ */
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+window.addEventListener('resize',resize); resize();
 
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+const PCOLS=[
+  ['#c084fc','#f472b6','#67e8f9','#6ee7b7','#fbbf24'],
+  ['#ff69b4','#ff1493','#ffb6c1','#ff80ab','#fff0f5'],
+  ['#e040fb','#ce93d8','#b39ddb','#7c4dff','#f8bbd0'],
+  ['#ff3200','#ff6a00','#ffd700','#ff4500','#fff'],
+];
+function rebuildParticles() {
+  const cols=PCOLS[themeIdx];
+  particles=[];
+  const n=themeIdx===3?35:110;
+  for(let i=0;i<n;i++) particles.push({
+    x:Math.random()*W,y:Math.random()*H,
+    r:Math.random()*1.8+0.4,
+    dx:(Math.random()-0.5)*(themeIdx===3?0.15:0.6),
+    dy:(Math.random()-0.5)*(themeIdx===3?0.15:0.6),
+    color:cols[Math.floor(Math.random()*cols.length)],
+    opacity:Math.random()*0.5+0.2,
+    tw:Math.random()*Math.PI*2,
+    ts:(Math.random()*0.02)+0.01,
+  });
 }
-window.addEventListener('resize', resize);
-resize();
 
-const COLORS = ['#c084fc','#f472b6','#67e8f9','#6ee7b7','#fbbf24'];
+function h2r(hex,a){ const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16); return `rgba(${r},${g},${b},${a})`; }
 
-function mkParticle() {
-  return {
-    x: Math.random() * W,
-    y: Math.random() * H,
-    r: Math.random() * 1.8 + 0.4,
-    dx: (Math.random() - 0.5) * 0.6,
-    dy: (Math.random() - 0.5) * 0.6,
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    opacity: Math.random() * 0.5 + 0.2,
-    twinkle: Math.random() * Math.PI * 2,
-    twinkleSpeed: (Math.random() * 0.02) + 0.01,
-  };
-}
-
-for (let i = 0; i < 120; i++) particles.push(mkParticle());
-
-/* connect nearby particles with thin lines */
-function connectParticles() {
-  const maxDist = 110;
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const d  = Math.sqrt(dx*dx + dy*dy);
-      if (d < maxDist) {
-        const alpha = (1 - d/maxDist) * 0.12;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(192,132,252,${alpha})`;
-        ctx.lineWidth = 0.6;
-        ctx.stroke();
-      }
-    }
+function connectPts(){
+  if(themeIdx===3) return;
+  const LC=['rgba(192,132,252,','rgba(255,105,180,','rgba(200,100,255,','rgba(255,50,0,'][themeIdx];
+  const maxD=110;
+  for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++){
+    const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<maxD){ ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=LC+(1-d/maxD)*0.12+')'; ctx.lineWidth=0.6; ctx.stroke(); }
   }
 }
 
-function animate() {
-  ctx.clearRect(0, 0, W, H);
-  connectParticles();
-  particles.forEach(p => {
-    p.twinkle += p.twinkleSpeed;
-    const glowAlpha = p.opacity + Math.sin(p.twinkle) * 0.15;
-
-    /* glow halo */
-    const grad = ctx.createRadialGradient(p.x,p.y,0, p.x,p.y,p.r*5);
-    grad.addColorStop(0, p.color.replace(')', `,${glowAlpha * 0.6})`).replace('rgb','rgba'));
-    grad.addColorStop(1, 'transparent');
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r * 5, 0, Math.PI * 2);
-    ctx.fillStyle = grad;
-    ctx.fill();
-
-    /* core dot */
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.globalAlpha = glowAlpha;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-
-    p.x += p.dx;
-    p.y += p.dy;
-    if (p.x < 0 || p.x > W) p.dx *= -1;
-    if (p.y < 0 || p.y > H) p.dy *= -1;
+function animLoop(){
+  ctx.clearRect(0,0,W,H);
+  connectPts();
+  particles.forEach(p=>{
+    p.tw+=p.ts;
+    const ga=p.opacity+Math.sin(p.tw)*0.15;
+    if(p.color.startsWith('#')&&p.color.length===7){
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
+      g.addColorStop(0,h2r(p.color,ga*0.6)); g.addColorStop(1,'transparent');
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=p.color; ctx.globalAlpha=ga; ctx.fill(); ctx.globalAlpha=1;
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<0||p.x>W) p.dx*=-1;
+    if(p.y<0||p.y>H) p.dy*=-1;
   });
-  requestAnimationFrame(animate);
+  requestAnimationFrame(animLoop);
 }
-animate();
+animLoop();
 
-/* ── ENTER KEY SUPPORT ── */
-document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+/* ══════════════════════════════════════
+   BARBIE RAIN
+══════════════════════════════════════ */
+function buildBarbieRain(){
+  const bg=document.getElementById('barbieRain');
+  bg.innerHTML='';
+  if(themeIdx!==1) return;
+  const syms=['💖','💗','💕','🎀','⭐','🌸','💝','✨','🩷','🌟'];
+  for(let i=0;i<35;i++){
+    const el=document.createElement('div');
+    el.className='b-item';
+    el.textContent=syms[Math.floor(Math.random()*syms.length)];
+    el.style.left=Math.random()*100+'vw';
+    el.style.fontSize=(Math.random()*1.2+0.7)+'rem';
+    el.style.animationDuration=(Math.random()*5+4)+'s';
+    el.style.animationDelay=-(Math.random()*9)+'s';
+    bg.appendChild(el);
+  }
+}
+
+/* ══════════════════════════════════════
+   FAIRY LAYER
+══════════════════════════════════════ */
+function buildFairyLayer(){
+  const bg=document.getElementById('fairyLayer');
+  bg.innerHTML='';
+  if(themeIdx!==2) return;
+  const sc=['#fff','#e040fb','#ce93d8','#b39ddb','#7c4dff','#f8bbd0'];
+  for(let i=0;i<90;i++){
+    const el=document.createElement('div');
+    el.className='f-star';
+    el.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;background:${sc[Math.floor(Math.random()*sc.length)]};animation-duration:${Math.random()*2+0.8}s;animation-delay:-${Math.random()*3}s;`;
+    bg.appendChild(el);
+  }
+  const dc=['#e040fb','#ce93d8','#b39ddb','#f8bbd0','#fff'];
+  for(let i=0;i<50;i++){
+    const el=document.createElement('div');
+    el.className='f-drift';
+    el.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${Math.random()*4+1}px;height:${Math.random()*4+1}px;background:${dc[Math.floor(Math.random()*dc.length)]};`;
+    el.style.setProperty('--dx',(Math.random()*120-60)+'px');
+    el.style.setProperty('--dy',(Math.random()*120-60)+'px');
+    el.style.animationDuration=(Math.random()*3+2)+'s';
+    el.style.animationDelay=-(Math.random()*5)+'s';
+    bg.appendChild(el);
+  }
+  // floating emojis
+  [['🧚','18%','12%','5s'],['🌙','72%','8%','7s'],['🦋','85%','70%','6s'],['⭐','8%','75%','8s']].forEach(([em,l,t,d])=>{
+    const el=document.createElement('div');
+    el.style.cssText=`position:absolute;font-size:1.8rem;left:${l};top:${t};opacity:0.35;animation:blobFloat ${d} ease-in-out infinite;`;
+    el.textContent=em;
+    bg.appendChild(el);
+  });
+}
+
+/* ══════════════════════════════════════
+   RACING LAYER
+══════════════════════════════════════ */
+function buildRacingLayer(){
+  const bg=document.getElementById('racingLayer');
+  bg.innerHTML='';
+  if(themeIdx!==3) return;
+
+  // road stripes
+  for(let i=0;i<14;i++){
+    const el=document.createElement('div');
+    el.className='r-stripe';
+    el.style.left=(38+Math.random()*24)+'%';
+    el.style.animationDuration=(Math.random()*0.4+0.5)+'s';
+    el.style.animationDelay=-(Math.random()*1.5)+'s';
+    bg.appendChild(el);
+  }
+  // speed lines
+  for(let i=0;i<25;i++){
+    const el=document.createElement('div');
+    el.className='r-line';
+    el.style.top=(Math.random()*100)+'vh';
+    el.style.width=(Math.random()*220+80)+'px';
+    el.style.left=(100+Math.random()*60)+'vw';
+    el.style.animationDuration=(Math.random()*0.35+0.25)+'s';
+    el.style.animationDelay=-(Math.random()*0.8)+'s';
+    bg.appendChild(el);
+  }
+  // cars
+  const cars=[['🏎️','20%','4s','-0s'],['🚗','50%','5.5s','-2s'],['🏎️','78%','3.5s','-4s']];
+  cars.forEach(([em,bot,dur,del])=>{
+    const el=document.createElement('div');
+    el.className='r-car';
+    el.textContent=em;
+    el.style.bottom=bot;
+    el.style.animationDuration=dur;
+    el.style.animationDelay=del;
+    bg.appendChild(el);
+  });
+  // flags
+  [['🏁','top:8px;left:8px;font-size:2.5rem'],['🏆','bottom:8px;right:8px;font-size:2rem'],['🔥','top:8px;right:8px;font-size:1.8rem']].forEach(([em,css])=>{
+    const el=document.createElement('div');
+    el.style.cssText=`position:absolute;${css};opacity:0.28;animation:iconBob 2.5s ease-in-out infinite;`;
+    el.textContent=em;
+    bg.appendChild(el);
+  });
+}
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+document.addEventListener('keydown',e=>{ if(e.key==='Enter') calculate(); });
+applyTheme();
 </script>
 </body>
 </html>
