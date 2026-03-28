@@ -25,7 +25,7 @@
     body.racing{--bg:#050505;--card-bg:rgba(8,8,8,0.88);--border:rgba(255,60,0,0.3);--text:#fff;--muted:rgba(255,180,80,0.6);--input-bg:rgba(255,60,0,0.06);--input-border:rgba(255,60,0,0.3);--input-color:#fff;--input-ph:rgba(255,140,80,0.4);--clock-bg:rgba(255,60,0,0.08);--btn-grad:linear-gradient(135deg,#ff2200,#ff6600,#ffd700,#ff2200);--shimmer:linear-gradient(90deg,transparent,#ff2200,#ffd700,#ff6600,transparent);--result-bg:linear-gradient(135deg,rgba(255,34,0,.2),rgba(255,102,0,.15));--badge-bg:rgba(255,60,0,0.12);--dot:#ff2200;--a1:#ff2200;--a2:#ffd700;--a3:#ff6600;}
     body.galaxy{--bg:#000510;--card-bg:rgba(5,10,30,0.75);--border:rgba(100,160,255,0.15);--text:#e8f4ff;--muted:rgba(160,200,255,0.5);--input-bg:rgba(50,100,255,0.08);--input-border:rgba(100,160,255,0.2);--input-color:#e8f4ff;--input-ph:rgba(160,200,255,0.35);--clock-bg:rgba(50,100,255,0.08);--btn-grad:linear-gradient(135deg,#1a3aff,#7b2fff,#00d4ff,#1a3aff);--shimmer:linear-gradient(90deg,transparent,#7b2fff,#00d4ff,#1a3aff,transparent);--result-bg:linear-gradient(135deg,rgba(27,58,255,.2),rgba(123,47,255,.15));--badge-bg:rgba(50,100,255,0.1);--dot:#00d4ff;--a1:#7b2fff;--a2:#00d4ff;--a3:#a78bfa;}
 
-    body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--bg);color:var(--text);transition:background 0.6s;}
+    body{font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;overflow-x:hidden;background:var(--bg);color:var(--text);transition:background 0.6s;padding:20px 16px 40px;}
     canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
     .blobs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
@@ -46,7 +46,7 @@
     .theme-label{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;background:var(--card-bg);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:50px;padding:6px 20px;font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);pointer-events:none;opacity:0;transition:opacity 0.4s;}
     .theme-label.show{opacity:1;}
 
-    .card{position:relative;z-index:10;width:390px;background:var(--card-bg);backdrop-filter:blur(36px) saturate(200%);border:1px solid var(--border);border-radius:28px;padding:32px 30px 28px;transition:background 0.4s,border-color 0.4s,box-shadow 0.4s;animation:cardIn 0.7s cubic-bezier(.22,1,.36,1) both;box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 80px rgba(192,132,252,0.08);}
+    .card{position:relative;z-index:10;width:390px;max-width:100%;background:var(--card-bg);backdrop-filter:blur(36px) saturate(200%);border:1px solid var(--border);border-radius:28px;padding:32px 30px 28px;transition:background 0.4s,border-color 0.4s,box-shadow 0.4s;animation:cardIn 0.7s cubic-bezier(.22,1,.36,1) both;box-shadow:0 24px 60px rgba(0,0,0,0.5),0 0 80px rgba(192,132,252,0.08);margin:auto;}
     @keyframes cardIn{from{opacity:0;transform:translateY(28px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
     .card::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:var(--shimmer);border-radius:999px;animation:shimmerLine 3s ease-in-out infinite;}
     @keyframes shimmerLine{0%,100%{opacity:0.5;transform:scaleX(0.8)}50%{opacity:1;transform:scaleX(1)}}
@@ -553,12 +553,16 @@ function calculate(){
     scheduleCloud(rem);
   }
   document.getElementById('result').classList.add('show');
+  // Smooth scroll to result
+  setTimeout(()=>{ document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'}); }, 100);
 
   // ★ Save leaveAtMinutes (absolute) so friends see live countdown
   const name = document.getElementById('userName').value;
   if(typeof window.saveToFirebase==='function'){
     window.saveToFirebase(name||'Anonymous', leaveStr, leave);
   }
+  // ★ Auto-refresh friends list immediately after saving
+  setTimeout(()=>{ if(typeof window.renderFriends==='function') window.renderFriends(); }, 800);
 }
 
 /* ══ CLOUD ══ */
